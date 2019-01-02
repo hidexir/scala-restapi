@@ -8,7 +8,6 @@ trait MySQLDBImpl {
 
   import driver.api._
   import slick.driver.MySQLDriver.api._
-  println("aa")
 
   val db = Database.forConfig("mysql")
 
