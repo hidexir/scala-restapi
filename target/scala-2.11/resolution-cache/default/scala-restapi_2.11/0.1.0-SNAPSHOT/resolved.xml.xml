@@ -4,7 +4,7 @@
 		module="scala-restapi_2.11"
 		revision="0.1.0-SNAPSHOT"
 		status="integration"
-		publication="20190102001636"
+		publication="20190102142043"
 	>
 		<description>
 		scala-restapi
