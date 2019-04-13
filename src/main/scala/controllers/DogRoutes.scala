@@ -9,19 +9,21 @@ import model.Dog
 
 import scala.concurrent.ExecutionContextExecutor
 
-trait DogRoutes extends SprayJsonSupport {
-    this: DogDao =>
+trait DogRoutes extends SprayJsonSupport with DogDao {
+
 
     implicit val dispatcher: ExecutionContextExecutor
 
-    val routes = pathPrefix("dogs") {
+    val routes =
+        pathPrefix("dogs") {
         pathEnd {
             get {
                 complete(getAll)
-            } ~ post {
+            } ~
+            post {
                 entity(as[Dog]) { dog =>
                     complete {
-                        create(dog).map { result => HttpResponse(entity = "dog has been saved successfully") }
+                        createEntry(dog).map { result => HttpResponse(entity = "dog has been saved successfully") }
                     }
                 }
             }
@@ -29,19 +31,23 @@ trait DogRoutes extends SprayJsonSupport {
             path(IntNumber) { id =>
                 get {
                     complete(getById(id))
-                } ~ put {
+                } ~
+                put {
                     entity(as[Dog]) { dog =>
                         complete {
                             val newDog = Dog(dog.name, Option(id))
-                            update(newDog).map { result => HttpResponse(entity = "dog has been updated successfully") }
+                            updateEntry(newDog).map { result => HttpResponse(entity = "dog has been updated successfully") }
                         }
                     }
-                } ~ MethodDirectives.delete {
+                } ~ delete {
                     complete {
-                        delete(id).map { result => HttpResponse(entity = "dog has been deleted successfully") }
+                        deleteEntry(id).map { result => HttpResponse(entity = "dog has been deleted successfully") }
                     }
                 }
             }
     }
+
+    def  create(params: CreateParams) =
+        service ? Create(params)
 }
 
